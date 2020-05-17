@@ -1,0 +1,46 @@
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if (wordList == null || !wordList.contains(endWord)) return 0;
+
+        int length = beginWord.length();
+        Map<String, List<String>> modMap = new HashMap<String, List<String>>();
+        for (String word : wordList){
+            for (int i = 0; i < length; i++){
+                String mod = new StringBuilder(word).replace(i, i+1, "*").toString();
+                List<String> list = modMap.getOrDefault(mod, new ArrayList<String>());
+                list.add(word);
+                modMap.put(mod, list);
+            }
+        }
+
+        Set<String> visited = new HashSet<>();
+        visited.add(beginWord);
+        Queue<String> queue = new LinkedList<>();
+        queue.add(beginWord);
+
+        int step = 1;
+        while (!queue.isEmpty()){
+            int size = queue.size();
+            while (size-- > 0){
+                String word = queue.poll();
+                for (int i = 0; i < length; i++){
+                    String mod = new StringBuilder(word).replace(i, i+1, "*").toString();
+                    List<String> list = modMap.getOrDefault(mod, new ArrayList<String>());
+                    for (String modWord : list){
+                        if (modWord.equals(endWord)){
+                            return step+1;
+                        }
+                        if (!visited.contains(modWord)){
+                            visited.add(modWord);
+                            queue.offer(modWord);
+                        }
+                    }
+                }
+
+            }
+            step++;
+        }
+
+        return 0;
+    }
+}s

@@ -1,0 +1,22 @@
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix.length == 0) return false;
+        int colSize = matrix[0].length;
+
+        int left = 0;
+        int right = matrix.length * colSize -1;
+        int mid = -1;
+        while(left <= right){
+            mid = (left + right) / 2;
+            int midRow = mid / colSize;
+            int midCol = mid % colSize;
+            if (matrix[midRow][midCol] == target) return true;
+            if (matrix[midRow][midCol] > target){
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return false;
+    }
+}
