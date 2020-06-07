@@ -1,0 +1,27 @@
+class Solution {
+    private Set<Character>[] cols = new Set[9];
+    private Set<Character>[] rows = new Set[9];
+    private Set<Character>[] subBoards = new Set[9];
+    public boolean isValidSudoku(char[][] board) {
+        if (board == null || board.length == 0) return false;
+        for (int i = 0; i < 9; i++) {
+            cols[i] = new HashSet<Character>();
+            rows[i] = new HashSet<Character>();
+            subBoards[i] = new HashSet<Character>();
+        }
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                char cnum = board[i][j];
+                int cSubBoard = i/3*3+j/3;
+                if (cnum != '.' && (rows[i].contains(cnum) || cols[j].contains(cnum)
+                    || subBoards[cSubBoard].contains(cnum))) {
+                        return false;
+                }
+                rows[i].add(cnum);
+                cols[j].add(cnum);
+                subBoards[cSubBoard].add(cnum);
+            }
+        }
+        return true;
+    }
+}

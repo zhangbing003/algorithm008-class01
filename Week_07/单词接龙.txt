@@ -1,0 +1,51 @@
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if (wordList == null || wordList.size() == 0 || !wordList.contains(endWord)) return 0;
+        Map<String, Set<String>> modMap = new HashMap();
+        for (String word : wordList) {
+            for (int i = 0; i < word.length(); i++) {
+                String mod = new StringBuilder(word).replace(i, i+1, "*").toString();
+                Set<String> modSet = modMap.getOrDefault(mod, new HashSet());
+                modSet.add(word);
+                modMap.put(mod, modSet);
+            }
+        }
+
+        Set<String> visited = new HashSet();
+        visited.add(beginWord);
+
+        Set<String> start = new HashSet();
+        Set<String> end = new HashSet();
+        start.add(beginWord);
+        end.add(endWord);
+        int step = 1;
+        while(!start.isEmpty() && !end.isEmpty()) {
+            if (start.size() > end.size()) {
+                Set<String> tmp = start;
+                start = end;
+                end = tmp;
+            }
+            Set<String> tmp = new HashSet();
+            for (String word : start) {
+                for (int i = 0; i < word.length(); i++) {
+                    String mod = new StringBuilder(word).replace(i, i+1, "*").toString();
+                    if (modMap.containsKey(mod)) {
+                        for (String modWord : modMap.get(mod)) {
+                            if (end.contains(modWord)) {
+                                return step + 1;
+                            }
+                            if (!visited.contains(modWord)) {
+                                tmp.add(modWord);
+                                visited.add(modWord);
+                            }
+                        }
+                    }
+
+                }
+            }
+            step++;
+            start = tmp;
+        }
+        return 0;
+    }
+}

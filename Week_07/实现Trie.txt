@@ -1,0 +1,79 @@
+class TreeNode {
+    private TreeNode[] nodes = new TreeNode[26];
+    private boolean end;
+
+    public boolean containsKey(char key) {
+        return nodes[key - 'a'] != null;
+    }
+
+    public TreeNode get(char key) {
+        return nodes[key - 'a'];
+    }
+
+    public void put(char key, TreeNode node) {
+        nodes[key - 'a'] = node;
+    }
+
+    public void setEnd() {
+        this.end = true;
+    }
+
+    public boolean isEnd() {
+        return this.end;
+    }
+}
+class Trie {
+
+    private TreeNode root;
+
+    /** Initialize your data structure here. */
+    public Trie() {
+        root = new TreeNode();
+    }
+
+    /** Inserts a word into the trie. */
+    public void insert(String word) {
+        TreeNode node = root;
+        for (char c : word.toCharArray()) {
+            TreeNode subNode = node.get(c);
+            if (subNode == null) {
+                subNode = new TreeNode();
+                node.put(c, subNode);
+            }
+            node = subNode;
+        }
+        node.setEnd();
+    }
+
+    /** Returns if the word is in the trie. */
+    public boolean search(String word) {
+        TreeNode node = root;
+        for (char c : word.toCharArray()) {
+            node = node.get(c);
+            if (node == null) {
+                return false;
+            }
+        }
+        return node.isEnd();
+    }
+
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    public boolean startsWith(String prefix) {
+        TreeNode node = root;
+        for (char c : prefix.toCharArray()) {
+            node = node.get(c);
+            if (node == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie obj = new Trie();
+ * obj.insert(word);
+ * boolean param_2 = obj.search(word);
+ * boolean param_3 = obj.startsWith(prefix);
+ */
